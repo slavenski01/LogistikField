@@ -1,0 +1,29 @@
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\obj\Debug\LogistikField.csprojResolveAssemblyReference.cache
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\obj\Debug\LogistikField.Form1.resources
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\obj\Debug\LogistikField.Properties.Resources.resources
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\obj\Debug\LogistikField.csproj.GenerateResource.Cache
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\obj\Debug\LogistikField.csproj.CoreCompileInputs.cache
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\bin\Debug\LogistikField.exe.config
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\bin\Debug\LogistikField.exe
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\bin\Debug\LogistikField.pdb
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\obj\Debug\LogistikField.exe
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 2.0\LogistikField\LogistikField\obj\Debug\LogistikField.pdb
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\bin\Debug\LogistikField.exe.config
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\bin\Debug\LogistikField.exe
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\bin\Debug\LogistikField.pdb
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\obj\Debug\LogistikField.csprojResolveAssemblyReference.cache
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\obj\Debug\LogistikField.Form1.resources
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\obj\Debug\LogistikField.Properties.Resources.resources
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\obj\Debug\LogistikField.csproj.GenerateResource.Cache
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\obj\Debug\LogistikField.exe
+C:\Users\slave\Desktop\учеба\Работа\LogistikField2\obj\Debug\LogistikField.pdb
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\bin\Debug\LogistikField.exe.config
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\bin\Debug\LogistikField.exe
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\bin\Debug\LogistikField.pdb
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\obj\Debug\LogistikField.csprojResolveAssemblyReference.cache
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\obj\Debug\LogistikField.Form1.resources
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\obj\Debug\LogistikField.Properties.Resources.resources
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\obj\Debug\LogistikField.csproj.GenerateResource.Cache
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\obj\Debug\LogistikField.csproj.CoreCompileInputs.cache
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\obj\Debug\LogistikField.exe
+C:\Users\v.a.kuznetsov\Desktop\работа\Оптимизация поля\Программа оптимизации 3.0\obj\Debug\LogistikField.pdb
