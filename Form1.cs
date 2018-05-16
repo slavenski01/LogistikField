@@ -25,7 +25,7 @@ namespace LogistikField
         List<double> coordsYLine = new List<double>();  //координаты поля по у
         double[] yTrackLine = new double[100];         //координаты отрезков трека
         double full_path_combain = 90;                  //полный ход комбайна
-
+        double field;
         public Form1()
         {
             InitializeComponent();
