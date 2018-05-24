@@ -23,12 +23,12 @@ namespace LogistikField
         List<double> coordsXLine = new List<double>();  //координаты поля по x
         List<double> coordsYLine = new List<double>();  //координаты поля по у
         double[] yTrackLine = new double[100];         //координаты отрезков трека
-        double full_path_combain = 90;                  //полный ход комбайна
+        
         public Form1()
         {
             InitializeComponent();
         }
-
+        
         private void buttonView_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -82,9 +82,9 @@ namespace LogistikField
                 {
                     //coordsX[i] = (((coordsX[i] * 10) - 438) * 500 - 400) * 2;
                     //coordsY[i] = (((coordsY[i] * 10) - 502) * 500 - 200) * 2;
-                    coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800)*10 - 800;
-                    coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200)*10 - 400;
-
+                    coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 10 - 800;
+                    coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 10 - 400;
+                    //coordsX[i] = coordsX[i] + 200;
                 }
 
                 //for (int i = 0; i < coordsX.Count; i++)
@@ -269,7 +269,8 @@ namespace LogistikField
 
         double distance(double x1, double y1, double x2, double y2)
         {
-            double resoult = Math.Sqrt((x2 - x1) + (y2 - y1));
+            double full_path_combain = Convert.ToDouble(textBoxForFullWayCombain.Text);
+            double resoult = Math.Sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
             if (resoult <= full_path_combain) { return 0; }
             else { return full_path_combain; }
         }
@@ -318,6 +319,7 @@ namespace LogistikField
             int indexMinCrossPointX = Array.IndexOf(temp_array_min, temp_knife_x2.Max());
             minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
             minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
+
             temp_knife_x1.RemoveAt(indexMinCrossPointX);
             temp_knife_y1.RemoveAt(indexMinCrossPointX);
             temp_knife_x2.RemoveAt(indexMinCrossPointX);
@@ -332,6 +334,7 @@ namespace LogistikField
             indexMinCrossPointX = Array.IndexOf(temp_array_min2, temp_knife_x2.Max());
             minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
             minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
+
             temp_knife_x1.RemoveAt(indexMinCrossPointX);
             temp_knife_y1.RemoveAt(indexMinCrossPointX);
             temp_knife_x2.RemoveAt(indexMinCrossPointX);
@@ -348,25 +351,53 @@ namespace LogistikField
 
             double y = minCoordsY[0], x = minCoordsX[0];
 
-            while(y > 0)
+            if (k >= 0)
             {
-                x++;
-                y = k * x + b;
-                
-            }
+                int i = 0;
+                while (y > 0)
+                {
+                    x--;
+                    y = k * x + b;
+                    //MessageBox.Show(i++.ToString());
+                }
 
-            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-               (float)x * -1, (float)y);
+                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+                   (float)x * -1, (float)y);
 
-            while (y < 400)
-            {
-                x--;
-                y = k * x + b;
-                //MessageBox.Show(x + " " + y);
-            }
-
-            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+                while (y < 400)
+                {
+                    x++;
+                    y = k * x + b;
+                    //MessageBox.Show(i++.ToString());
+                    //MessageBox.Show(x + " " + y);
+                }
+                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
                 (float)x * -1, (float)y);
+            }
+            else
+            {
+                int i = 0;
+                while (y > 0)
+                {
+                    x++;
+                    y = k * x + b;
+
+                    //MessageBox.Show(i++.ToString());
+                }
+
+                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+                   (float)x * -1, (float)y);
+
+                while (y < 400)
+                {
+                    x--;
+                    y = k * x + b;
+                    //MessageBox.Show(i++.ToString());
+                    //MessageBox.Show(x + " " + y);
+                }
+                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+                (float)x * -1, (float)y);
+            }
         }
     }
 }
