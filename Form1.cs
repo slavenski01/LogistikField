@@ -270,11 +270,10 @@ namespace LogistikField
         double distance(double x1, double y1, double x2, double y2)
         {
             double full_path_combain = Convert.ToDouble(textBoxForFullWayCombain.Text);
-            double resoult = Math.Sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
-            if (resoult <= full_path_combain) { return 0; }
+            double resoult = Math.Sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1)); //Расстояние м/у точками
+            if (resoult <= full_path_combain) { return 0; } 
             else { return full_path_combain; }
         }
-
 
         //Нажатие кнопки для "отрисовать разрез"
         private void buttonTrackView_Click(object sender, EventArgs e)
@@ -299,11 +298,6 @@ namespace LogistikField
                     temp_knife_y1.Add(crossPointY[i]);
                     temp_knife_x2.Add(crossPointX[i] - distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1]));
                     temp_knife_y2.Add(crossPointY[i]);
-                    //g.DrawLine(myPen,
-                    //    (float)crossPointX[i] * -1,
-                    //    (float)crossPointY[i],
-                    //    ((float)crossPointX[i] - (float)distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1])) * -1,
-                    //    (float)crossPointY[i + 1]);
                 }
             }
             List<double> minCoordsX = new List<double>();
@@ -339,9 +333,6 @@ namespace LogistikField
             temp_knife_y1.RemoveAt(indexMinCrossPointX);
             temp_knife_x2.RemoveAt(indexMinCrossPointX);
             temp_knife_y2.RemoveAt(indexMinCrossPointX);
-
-            //MessageBox.Show("1) " + minCoordsX[0].ToString() + " " + minCoordsY[0].ToString() +
-            //    "\n2) " + minCoordsX[1].ToString() + " " + minCoordsY[1].ToString());
 
             g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
                 (float)minCoordsX[1] * -1, (float)minCoordsY[1]);
