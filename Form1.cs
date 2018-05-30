@@ -22,7 +22,7 @@ namespace LogistikField
         List<double> yPointsTrack = new List<double>(); //координаты отрисовки трека по у
         List<double> coordsXLine = new List<double>();  //координаты поля по x
         List<double> coordsYLine = new List<double>();  //координаты поля по у
-        double[] yTrackLine = new double[100];         //координаты отрезков трека
+        double[] yTrackLine = new double[100];          //координаты отрезков трека
         
         public Form1()
         {
@@ -82,9 +82,10 @@ namespace LogistikField
                 {
                     //coordsX[i] = (((coordsX[i] * 10) - 438) * 500 - 400) * 2;
                     //coordsY[i] = (((coordsY[i] * 10) - 502) * 500 - 200) * 2;
-                    coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 10 - 800;
-                    coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 10 - 400;
-                    //coordsX[i] = coordsX[i] + 200;
+                    //coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 10 - 800;
+                    //coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 10 - 400;
+                    coordsX[i] = coordsX[i] + 200;
+                    coordsY[i] = coordsY[i] + 140;
                 }
 
                 //for (int i = 0; i < coordsX.Count; i++)
