@@ -138,6 +138,9 @@
             this.Controls.Add(this.buttonView);
             this.Controls.Add(this.textBoxCoordsTest);
             this.Controls.Add(this.buttonViewField);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Logistik";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxField)).EndInit();

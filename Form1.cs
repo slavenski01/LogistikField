@@ -23,7 +23,9 @@ namespace LogistikField
         List<double> coordsXLine = new List<double>();  //координаты поля по x
         List<double> coordsYLine = new List<double>();  //координаты поля по у
         double[] yTrackLine = new double[100];          //координаты отрезков трека
-        
+        List<double> tempTruncateX = new List<double>();
+        List<double> tempTruncateY = new List<double>();
+
         public Form1()
         {
             InitializeComponent();
@@ -78,8 +80,11 @@ namespace LogistikField
                     
                 }
 
+                
                 for (int i = 0; i < coordsX.Count; i++)
                 {
+                    tempTruncateX.Add(Math.Truncate(coordsX[i]));
+                    tempTruncateY.Add(Math.Truncate(coordsY[i]));
                     //coordsX[i] = (((coordsX[i] * 10) - 438) * 500 - 400) * 2;
                     //coordsY[i] = (((coordsY[i] * 10) - 502) * 500 - 200) * 2;
                     //coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 10 - 800;
@@ -266,6 +271,22 @@ namespace LogistikField
                 g.DrawLine(myPen, (float)coordsX[i + 1] * (-1), (float)coordsY[i + 1] * (1),
                      (float)coordsX[i] * (-1), (float)coordsY[i] * (1));
             }
+
+            //Тестирование геоинформационных данных
+            //double crosX = crossPointX[0] + 800;
+            //crosX = crosX / 10;
+            //crosX = crosX + 800;
+            //crosX = crosX / 1000;
+            //crosX = crosX + tempTruncateX[0];
+
+            //double crosY = crossPointY[0] + 800;
+            //crosY = crosY / 10;
+            //crosY = crosY + 800;
+            //crosY = crosY / 1000;
+            //crosY = crosY + tempTruncateY[0];
+
+            //MessageBox.Show("coordsField: x1 = " + coordsX[0] + "   y = " + coordsY[0]
+            //    + "\ncrossPoint: x1 = " + crosX + "   y = " + crosY);
         }
 
         double distance(double x1, double y1, double x2, double y2)
@@ -279,116 +300,296 @@ namespace LogistikField
         //Нажатие кнопки для "отрисовать разрез"
         private void buttonTrackView_Click(object sender, EventArgs e)
         {
-            Graphics g = pictureBoxField.CreateGraphics();
-            Pen myPen = new Pen(Color.Green);   //Кисть зеленого цвета для отрисовки разреза
-            g.TranslateTransform((float)pictureBoxField.Width, 0);
+            //int turnCount = 0;
+            //if (textBoxForFullWayCombain.Text.Equals(""))
+            //{
+            //    MessageBox.Show("Укажите длину хода комбайна");
+            //}
+            //else
+            //{
+            //    Graphics g = pictureBoxField.CreateGraphics();
+            //    Pen myPen = new Pen(Color.Green);   //Кисть зеленого цвета для отрисовки разреза
+            //    g.TranslateTransform((float)pictureBoxField.Width, 0);
 
-            //double full_path_combain = Convert.ToDouble(textBoxForFullWayCombain.Text);   //Полный ход комбайна
-            List<double> temp_knife_x1 = new List<double>();
-            List<double> temp_knife_y1 = new List<double>();
-            List<double> temp_knife_x2 = new List<double>();
-            List<double> temp_knife_y2 = new List<double>();
-            List<double> start_min_points = new List<double>(); //Список, хранящий две минимальные точки
-            int[] countPointTrack = new int[2];
+            //    List<double> temp_knife_x1 = new List<double>();
+            //    List<double> temp_knife_y1 = new List<double>();
+            //    List<double> temp_knife_x2 = new List<double>();
+            //    List<double> temp_knife_y2 = new List<double>();
+            //    List<double> start_min_points = new List<double>(); //Список, хранящий две минимальные точки
+            //    int[] countPointTrack = new int[2];
+            //    List<double> minCoordsX = new List<double>();
+            //    List<double> minCoordsY = new List<double>();
+            //    do
+            //    {
+            //        turnCount = 0;
+            //        for (int i = 0; i < crossPointX.Count; i++)
+            //        {
+            //            if (i % 2 == 0)
+            //            {
+            //                temp_knife_x1.Add(crossPointX[i]);
+            //                temp_knife_y1.Add(crossPointY[i]);
+            //                temp_knife_x2.Add(crossPointX[i] - distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1]));
+            //                temp_knife_y2.Add(crossPointY[i]);
+            //            }
+            //        }
 
-            for (int i = 0; i < crossPointX.Count; i++)
+
+            //        double[] temp_array_min = new double[temp_knife_x2.Count];
+
+            //        for (int i = 0; i < temp_knife_x2.Count; i++)
+            //        {
+            //            temp_array_min[i] = temp_knife_x2[i];
+            //        }
+
+            //        for (int i = 0; i < crossPointX.Count - 1; i++)
+            //        {
+            //            if (i % 2 == 0)
+            //            {
+            //                if (distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1]) != 0)
+            //                {
+            //                    turnCount++;
+            //                }
+            //            }
+            //        }
+
+            //        //передали первую точку
+            //        int indexMinCrossPointX = Array.IndexOf(temp_array_min, temp_knife_x2.Max());
+            //        minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
+            //        minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
+
+            //        //удалили первый максимальный отрезок
+            //        temp_knife_x1.RemoveAt(indexMinCrossPointX);
+            //        temp_knife_y1.RemoveAt(indexMinCrossPointX);
+            //        temp_knife_x2.RemoveAt(indexMinCrossPointX);
+            //        temp_knife_y2.RemoveAt(indexMinCrossPointX);
+
+            //        //аналогично
+            //        double[] temp_array_min2 = new double[temp_knife_x2.Count];
+            //        for (int i = 0; i < temp_knife_x2.Count; i++)
+            //        {
+            //            temp_array_min2[i] = temp_knife_x2[i];
+            //        }
+
+            //        indexMinCrossPointX = Array.IndexOf(temp_array_min2, temp_knife_x2.Max());
+            //        minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
+            //        minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
+
+            //        temp_knife_x1.RemoveAt(indexMinCrossPointX);
+            //        temp_knife_y1.RemoveAt(indexMinCrossPointX);
+            //        temp_knife_x2.RemoveAt(indexMinCrossPointX);
+            //        temp_knife_y2.RemoveAt(indexMinCrossPointX);
+
+            //        g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+            //            (float)minCoordsX[1] * -1, (float)minCoordsY[1]);
+
+            //        double k = (minCoordsY[0] - minCoordsY[1]) / (minCoordsX[0] - minCoordsX[1]);
+            //        double b = minCoordsY[0] - k * minCoordsX[0];
+
+            //        double y = minCoordsY[0], x = minCoordsX[0];
+
+            //        //переменные для хранения координат i-го прокоса
+            //        double xProkos1, yProkos1, xProkos2, yProkos2;
+            //        if (k >= 0)
+            //        {
+            //            while (y > 0)
+            //            {
+            //                x--;
+            //                y = k * x + b;
+            //                //MessageBox.Show(i++.ToString());
+            //            }
+
+            //            xProkos1 = x;
+            //            yProkos1 = y;
+
+            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+            //                (float)x * -1, (float)y);
+
+            //            while (y < 400)
+            //            {
+            //                x++;
+            //                y = k * x + b;
+            //                //MessageBox.Show(i++.ToString());
+            //                //MessageBox.Show(x + " " + y);
+            //            }
+
+            //            xProkos2 = x;
+            //            yProkos2 = y;
+
+            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+            //            (float)x * -1, (float)y);
+            //        }
+            //        else
+            //        {
+            //            int i = 0;
+            //            while (y > 0)
+            //            {
+            //                x++;
+            //                y = k * x + b;
+
+            //                //MessageBox.Show(i++.ToString());
+            //            }
+
+            //            xProkos1 = x;
+            //            yProkos1 = y;
+
+            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+            //                (float)x * -1, (float)y);
+
+            //            while (y < 400)
+            //            {
+            //                x--;
+            //                y = k * x + b;
+            //                //MessageBox.Show(i++.ToString());
+            //                //MessageBox.Show(x + " " + y);
+            //            }
+
+            //            xProkos2 = x;
+            //            yProkos2 = y;
+
+            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
+            //            (float)x * -1, (float)y);
+            //        }
+
+            //        //Цикл для переноса точек пересечения к первому прокосу
+            //        List<double> nextLinesForP = new List<double>();
+            //        double[] newLines = new double[2];
+
+            //        for (int i = 0; i < crossPointX.Count - 1; i++)
+            //        {
+            //            if (i % 2 == 0)
+            //            {
+            //                newLines[0] = DoLinesIntersect(xProkos1, yProkos1, xProkos2, yProkos2,
+            //                    crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1])[0];
+            //                newLines[1] = DoLinesIntersect(xProkos1, yProkos1, xProkos2, yProkos2,
+            //                    crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1])[1];
+
+            //                if (newLines[0] != -1 && newLines[1] != -1)
+            //                {
+            //                    crossPointX[i] = newLines[0];
+            //                    crossPointY[i] = newLines[1];
+            //                }
+            //            }
+            //        }
+
+            //        minCoordsX.Clear();
+            //        minCoordsY.Clear();
+            //        temp_knife_x1.Clear();
+            //        temp_knife_x2.Clear();
+            //        temp_knife_y1.Clear();
+            //        temp_knife_y2.Clear();
+            //        temp_array_min = null;
+            //        temp_array_min2 = null;
+
+            //    } while (turnCount >= 2);
+            //}
+
+            if (textBoxForFullWayCombain.Text.Equals(""))
             {
-                if (i % 2 == 0)
-                {
-                    temp_knife_x1.Add(crossPointX[i]);
-                    temp_knife_y1.Add(crossPointY[i]);
-                    temp_knife_x2.Add(crossPointX[i] - distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1]));
-                    temp_knife_y2.Add(crossPointY[i]);
-                }
-            }
-            List<double> minCoordsX = new List<double>();
-            List<double> minCoordsY = new List<double>();
-
-            double[] temp_array_min = new double[temp_knife_x2.Count];
-
-            for(int i = 0; i < temp_knife_x2.Count; i++)
-            {
-                temp_array_min[i] = temp_knife_x2[i];
-            }
-
-            int indexMinCrossPointX = Array.IndexOf(temp_array_min, temp_knife_x2.Max());
-            minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
-            minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
-
-            temp_knife_x1.RemoveAt(indexMinCrossPointX);
-            temp_knife_y1.RemoveAt(indexMinCrossPointX);
-            temp_knife_x2.RemoveAt(indexMinCrossPointX);
-            temp_knife_y2.RemoveAt(indexMinCrossPointX);
-
-            double[] temp_array_min2 = new double[temp_knife_x2.Count];
-            for (int i = 0; i < temp_knife_x2.Count; i++)
-            {
-                temp_array_min2[i] = temp_knife_x2[i];
-            }
-
-            indexMinCrossPointX = Array.IndexOf(temp_array_min2, temp_knife_x2.Max());
-            minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
-            minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
-
-            temp_knife_x1.RemoveAt(indexMinCrossPointX);
-            temp_knife_y1.RemoveAt(indexMinCrossPointX);
-            temp_knife_x2.RemoveAt(indexMinCrossPointX);
-            temp_knife_y2.RemoveAt(indexMinCrossPointX);
-
-            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-                (float)minCoordsX[1] * -1, (float)minCoordsY[1]);
-
-            double k = (minCoordsY[0] - minCoordsY[1]) / (minCoordsX[0] - minCoordsX[1]);
-            double b = minCoordsY[0] - k * minCoordsX[0];
-
-            double y = minCoordsY[0], x = minCoordsX[0];
-
-            if (k >= 0)
-            {
-                int i = 0;
-                while (y > 0)
-                {
-                    x--;
-                    y = k * x + b;
-                    //MessageBox.Show(i++.ToString());
-                }
-
-                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-                   (float)x * -1, (float)y);
-
-                while (y < 400)
-                {
-                    x++;
-                    y = k * x + b;
-                    //MessageBox.Show(i++.ToString());
-                    //MessageBox.Show(x + " " + y);
-                }
-                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-                (float)x * -1, (float)y);
+                MessageBox.Show("enter full!!");
             }
             else
             {
-                int i = 0;
-                while (y > 0)
+                Graphics g = pictureBoxField.CreateGraphics();
+                Pen myPen = new Pen(Color.Green);   //Кисть зеленого цвета для отрисовки разреза
+                g.TranslateTransform((float)pictureBoxField.Width, 0);
+
+                double fullWayCombain = Convert.ToDouble(textBoxForFullWayCombain.Text);
+
+                int indexMinELem = 0;
+                double longLine = 0, longLineTemp = 0;
+
+                List<double> coordsKnifeX = new List<double>();
+                List<double> coordsKnifeY = new List<double>();
+
+                double[] prokosX = new double[4];
+                double[] prokosY = new double[4];
+
+                int longForProkosCount;
+                do
                 {
-                    x++;
-                    y = k * x + b;
+                    longForProkosCount = 0;
+                    for (int i = 0; i < crossPointX.Count - 1; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            if (distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1]) != 0)
+                            {
+                                coordsKnifeX.Add(crossPointX[i]);
+                                coordsKnifeY.Add(crossPointY[i]);
+                                coordsKnifeX.Add(crossPointX[i + 1]); 
+                                coordsKnifeY.Add(crossPointY[i + 1]);
+                                longForProkosCount++;
+                            }
+                        }
+                    }
 
-                    //MessageBox.Show(i++.ToString());
-                }
+                    for (int i = 0; i < coordsKnifeX.Count - 1; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            longLineTemp = Math.Sqrt((coordsKnifeX[i + 1] - coordsKnifeX[i]) *
+                                (coordsKnifeX[i + 1] - coordsKnifeX[i]) +
+                                (coordsKnifeY[i + 1] - coordsKnifeY[i]) *
+                                (coordsKnifeY[i + 1] - coordsKnifeY[i]));
+                            if (longLineTemp > longLine)
+                            {
+                                indexMinELem = i;
+                                longLine = longLineTemp;
+                            }
+                        }
+                    }
 
-                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-                   (float)x * -1, (float)y);
+                    //начало
+                    prokosX[0] = coordsKnifeX[indexMinELem];
+                    prokosY[0] = coordsKnifeY[indexMinELem];
+                    //конец
+                    prokosX[1] = prokosX[0] - fullWayCombain;
+                    prokosY[1] = prokosY[0];
 
-                while (y < 400)
-                {
-                    x--;
-                    y = k * x + b;
-                    //MessageBox.Show(i++.ToString());
-                    //MessageBox.Show(x + " " + y);
-                }
-                g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-                (float)x * -1, (float)y);
+                    coordsKnifeX.RemoveAt(indexMinELem);
+                    coordsKnifeY.RemoveAt(indexMinELem);
+                    coordsKnifeX.RemoveAt(indexMinELem);
+                    coordsKnifeY.RemoveAt(indexMinELem);
+
+                    longLine = 0;
+                    MessageBox.Show(coordsKnifeX.Count.ToString());
+
+                    for (int i = 0; i < coordsKnifeX.Count - 1; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            longLineTemp = Math.Sqrt((coordsKnifeX[i + 1] - coordsKnifeX[i]) *
+                                (coordsKnifeX[i + 1] - coordsKnifeX[i]) +
+                                (coordsKnifeY[i + 1] - coordsKnifeY[i]) *
+                                (coordsKnifeY[i + 1] - coordsKnifeY[i]));
+                            if (longLineTemp > longLine)
+                            {
+                                indexMinELem = i;
+                                longLine = longLineTemp;
+                            }
+                        }
+                    }
+
+                    //начало
+                    prokosX[2] = coordsKnifeX[indexMinELem];
+                    prokosY[2] = coordsKnifeY[indexMinELem];
+                    //конец
+                    prokosX[3] = prokosX[2] - fullWayCombain;
+                    prokosY[3] = prokosY[2];
+
+                    coordsKnifeX.RemoveAt(indexMinELem);
+                    coordsKnifeY.RemoveAt(indexMinELem);
+                    coordsKnifeX.RemoveAt(indexMinELem);
+                    coordsKnifeY.RemoveAt(indexMinELem);
+                    MessageBox.Show(coordsKnifeX.Count.ToString());
+                    //MessageBox.Show(longForProkosCount.ToString());
+
+                    g.DrawLine(myPen, (float)prokosX[0] * -1, (float)prokosY[0],
+                        (float)prokosX[1] * -1, (float)prokosY[1]);
+                    g.DrawLine(myPen, (float)prokosX[2] * -1, (float)prokosY[2],
+                            (float)prokosX[3] * -1, (float)prokosY[3]);
+
+                } while (longForProkosCount <= 2);
             }
         }
     }
