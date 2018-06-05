@@ -14,56 +14,43 @@ namespace LogistikField
 
     public partial class Form1 : Form
     {
-        List<double> coordsX = new List<double>();      //координаты поля по x
-        List<double> coordsY = new List<double>();      //ккординаты поля по у
-        List<double> crossPointX = new List<double>();  //координаты пересечения поля по x
-        List<double> crossPointY = new List<double>();  //ккординаты пересечения поля по у
-        List<double> xPointsTrack = new List<double>(); //координаты отрисовки трека по х
-        List<double> yPointsTrack = new List<double>(); //координаты отрисовки трека по у
-        List<double> coordsXLine = new List<double>();  //координаты поля по x
-        List<double> coordsYLine = new List<double>();  //координаты поля по у
-        double[] yTrackLine = new double[100];          //координаты отрезков трека
+        //координаты поля
+        List<double> coordsX = new List<double>();      
+        List<double> coordsY = new List<double>();
+        List<double> coordsXLine = new List<double>();
+        List<double> coordsYLine = new List<double>();
+
+        //координаты пересечения поля с отрезками трека
+        List<double> crossPointX = new List<double>();
+        List<double> crossPointY = new List<double>();
+
+        //трек следования техники
+        List<double> xPointsTrack = new List<double>();
+        List<double> yPointsTrack = new List<double>();
+        double[] yTrackLine = new double[1000];
+
+        //Координаты для теста географических преобразований пересечений трека с полем
         List<double> tempTruncateX = new List<double>();
         List<double> tempTruncateY = new List<double>();
-
         List<double> testGeoX = new List<double>();
         List<double> testGeoY = new List<double>();
+
+        //Координаты "дырок" в поле
+        double[,,] troubleZones = new double[0,0,0];
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        //Функция преобразования географических координат
-        private double[] geoTransform (double x, double y)
+        //Функции преобразования географических координат
+        private double geoTransformX (double x)
+        { 
+            return x;
+        }
+        private double geoTransformY (double y)
         {
-            double[] cords = new double[2];
-            cords[0] = x;
-            cords[1] = y;
-
-            int widthPictureBox = pictureBoxField.Width;
-            int heigthPictureBox = pictureBoxField.Height;
-
-            double maxX = coordsX.Max();
-            double minX = coordsX.Min();
-            double maxY = coordsY.Max();
-            double minY = coordsY.Min();
-
-            // Масштаб
-            double scalle = 1;
-
-            // Вычисления
-            double koffX = (maxX - minX) / widthPictureBox;
-            double koffY = (maxY - minY) / heigthPictureBox;
-            double koffMax = (koffX < koffY ? koffY : koffX) / scalle;
-
-            double centrX = (maxX - minX) / 2;
-            double centrY = (maxY - minY) / 2; //аналогично только по Y.
-
-            double xPixel = Math.Round(((double)cords[0] - minX) / koffMax, 0) + centrX;
-            double yPixel = Math.Round(((double)cords[1] - minY) / koffMax, 0) + centrY;
-
-            return cords;
+            return y;
         }
 
         private void buttonView_Click(object sender, EventArgs e)
@@ -82,11 +69,9 @@ namespace LogistikField
         {
             if (textBoxCoordsTest.Text != "")
             {
-                //pictureBoxField.Scale(0.1f);
                 Graphics g = pictureBoxField.CreateGraphics();
                 g.TranslateTransform((float)pictureBoxField.Width, 0);
-                //g.TranslateTransform(48, 40);
-                Pen myPen = new Pen(Color.Black);   //Кисть черного цвета для отрисовки поля
+                Pen myPen = new Pen(Color.Black);
                 StreamReader fcoords = new StreamReader(textBoxCoordsTest.Text);
                 
                 string temp = "";   //хранит текущее число в файле до точки с запятой
@@ -104,12 +89,10 @@ namespace LogistikField
                 {
                     if (i % 2 == 0)
                     {
-                        //coordsX.Add((Convert.ToDouble(temps[i]) - 50) * 1000);
                         coordsX.Add(Convert.ToDouble(temps[i]));
                     }
                     else
                     {
-                        //coordsY.Add((Convert.ToDouble(temps[i]) - 44) * 1000);
                         coordsY.Add(Convert.ToDouble(temps[i]));
                     }
                     
@@ -122,12 +105,13 @@ namespace LogistikField
                     tempTruncateY.Add(Math.Truncate(coordsY[i]));
                     //coordsX[i] = (((coordsX[i] * 10) - 438) * 500 - 400) * 2;
                     //coordsY[i] = (((coordsY[i] * 10) - 502) * 500 - 200) * 2;
-                    //coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 10 - 1100;
-                    //coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 10 - 1100;
+                    coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 5 - 500;
+                    coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 5 - 500;
                     //coordsX[i] = coordsX[i] + 200;
                     //coordsY[i] = coordsY[i] + 140;
-                    testGeoX.Add(geoTransform(coordsX[i], coordsY[i])[0]);
-                    testGeoY.Add(geoTransform(coordsX[i], coordsY[i])[1]);
+                    //testGeoX.Add(geoTransform(coordsX[i], coordsY[i])[0]);
+                    //testGeoY.Add(geoTransform(coordsX[i], coordsY[i])[1]);
+                    //MessageBox.Show(testGeoX[i].ToString() + "         " + testGeoY[i].ToString());
                 }
 
                 //for (int i = 0; i < coordsX.Count; i++)
@@ -136,25 +120,23 @@ namespace LogistikField
                 //}
 
 
-                //for (int i = coordsX.Count - 1; i > 0; i--)
-                //{
-                //    //g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-0.1)), Convert.ToSingle(coordsY[i - 1] * (0.1)),
-                //    //     Convert.ToSingle(coordsX[i] * (-0.1)), Convert.ToSingle(coordsY[i] * (0.1)));
-                //    g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
-                //         Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
-                //}
-                for (int i = testGeoX.Count - 1; i > 0; i--)
+                for (int i = coordsX.Count - 1; i > 0; i--)
                 {
                     //g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-0.1)), Convert.ToSingle(coordsY[i - 1] * (0.1)),
                     //     Convert.ToSingle(coordsX[i] * (-0.1)), Convert.ToSingle(coordsY[i] * (0.1)));
-                    g.DrawLine(myPen, Convert.ToSingle(testGeoX[i - 1] * (-1)), Convert.ToSingle(testGeoY[i - 1] * (1)),
-                         Convert.ToSingle(testGeoX[i] * (-1)), Convert.ToSingle(testGeoY[i] * (1)));
+                    g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
+                         Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
                 }
             }
             else
             {
                 MessageBox.Show("Файл с полем не выбран!");
             }
+        }
+
+        private void buttonAddTrouble_Click(object sender, EventArgs e)
+        {
+
         }
 
         /*Функция определения пересечения отрезков*/
@@ -251,9 +233,9 @@ namespace LogistikField
                 /*Все повернули, считаем кол-во пересечений*/
 
                 //Отрезки трека y = 10 + i;
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 1000; i++)
                 {
-                    yTrackLine[i] = i*4;
+                    yTrackLine[i] = i;
                 }
 
                 //Цикл, который считает пересечения
@@ -343,189 +325,6 @@ namespace LogistikField
         //Нажатие кнопки для "отрисовать разрез"
         private void buttonTrackView_Click(object sender, EventArgs e)
         {
-            //int turnCount = 0;
-            //if (textBoxForFullWayCombain.Text.Equals(""))
-            //{
-            //    MessageBox.Show("Укажите длину хода комбайна");
-            //}
-            //else
-            //{
-            //    Graphics g = pictureBoxField.CreateGraphics();
-            //    Pen myPen = new Pen(Color.Green);   //Кисть зеленого цвета для отрисовки разреза
-            //    g.TranslateTransform((float)pictureBoxField.Width, 0);
-
-            //    List<double> temp_knife_x1 = new List<double>();
-            //    List<double> temp_knife_y1 = new List<double>();
-            //    List<double> temp_knife_x2 = new List<double>();
-            //    List<double> temp_knife_y2 = new List<double>();
-            //    List<double> start_min_points = new List<double>(); //Список, хранящий две минимальные точки
-            //    int[] countPointTrack = new int[2];
-            //    List<double> minCoordsX = new List<double>();
-            //    List<double> minCoordsY = new List<double>();
-            //    do
-            //    {
-            //        turnCount = 0;
-            //        for (int i = 0; i < crossPointX.Count; i++)
-            //        {
-            //            if (i % 2 == 0)
-            //            {
-            //                temp_knife_x1.Add(crossPointX[i]);
-            //                temp_knife_y1.Add(crossPointY[i]);
-            //                temp_knife_x2.Add(crossPointX[i] - distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1]));
-            //                temp_knife_y2.Add(crossPointY[i]);
-            //            }
-            //        }
-
-
-            //        double[] temp_array_min = new double[temp_knife_x2.Count];
-
-            //        for (int i = 0; i < temp_knife_x2.Count; i++)
-            //        {
-            //            temp_array_min[i] = temp_knife_x2[i];
-            //        }
-
-            //        for (int i = 0; i < crossPointX.Count - 1; i++)
-            //        {
-            //            if (i % 2 == 0)
-            //            {
-            //                if (distance(crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1]) != 0)
-            //                {
-            //                    turnCount++;
-            //                }
-            //            }
-            //        }
-
-            //        //передали первую точку
-            //        int indexMinCrossPointX = Array.IndexOf(temp_array_min, temp_knife_x2.Max());
-            //        minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
-            //        minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
-
-            //        //удалили первый максимальный отрезок
-            //        temp_knife_x1.RemoveAt(indexMinCrossPointX);
-            //        temp_knife_y1.RemoveAt(indexMinCrossPointX);
-            //        temp_knife_x2.RemoveAt(indexMinCrossPointX);
-            //        temp_knife_y2.RemoveAt(indexMinCrossPointX);
-
-            //        //аналогично
-            //        double[] temp_array_min2 = new double[temp_knife_x2.Count];
-            //        for (int i = 0; i < temp_knife_x2.Count; i++)
-            //        {
-            //            temp_array_min2[i] = temp_knife_x2[i];
-            //        }
-
-            //        indexMinCrossPointX = Array.IndexOf(temp_array_min2, temp_knife_x2.Max());
-            //        minCoordsX.Add(temp_knife_x2[indexMinCrossPointX]);
-            //        minCoordsY.Add(temp_knife_y2[indexMinCrossPointX]);
-
-            //        temp_knife_x1.RemoveAt(indexMinCrossPointX);
-            //        temp_knife_y1.RemoveAt(indexMinCrossPointX);
-            //        temp_knife_x2.RemoveAt(indexMinCrossPointX);
-            //        temp_knife_y2.RemoveAt(indexMinCrossPointX);
-
-            //        g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-            //            (float)minCoordsX[1] * -1, (float)minCoordsY[1]);
-
-            //        double k = (minCoordsY[0] - minCoordsY[1]) / (minCoordsX[0] - minCoordsX[1]);
-            //        double b = minCoordsY[0] - k * minCoordsX[0];
-
-            //        double y = minCoordsY[0], x = minCoordsX[0];
-
-            //        //переменные для хранения координат i-го прокоса
-            //        double xProkos1, yProkos1, xProkos2, yProkos2;
-            //        if (k >= 0)
-            //        {
-            //            while (y > 0)
-            //            {
-            //                x--;
-            //                y = k * x + b;
-            //                //MessageBox.Show(i++.ToString());
-            //            }
-
-            //            xProkos1 = x;
-            //            yProkos1 = y;
-
-            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-            //                (float)x * -1, (float)y);
-
-            //            while (y < 400)
-            //            {
-            //                x++;
-            //                y = k * x + b;
-            //                //MessageBox.Show(i++.ToString());
-            //                //MessageBox.Show(x + " " + y);
-            //            }
-
-            //            xProkos2 = x;
-            //            yProkos2 = y;
-
-            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-            //            (float)x * -1, (float)y);
-            //        }
-            //        else
-            //        {
-            //            int i = 0;
-            //            while (y > 0)
-            //            {
-            //                x++;
-            //                y = k * x + b;
-
-            //                //MessageBox.Show(i++.ToString());
-            //            }
-
-            //            xProkos1 = x;
-            //            yProkos1 = y;
-
-            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-            //                (float)x * -1, (float)y);
-
-            //            while (y < 400)
-            //            {
-            //                x--;
-            //                y = k * x + b;
-            //                //MessageBox.Show(i++.ToString());
-            //                //MessageBox.Show(x + " " + y);
-            //            }
-
-            //            xProkos2 = x;
-            //            yProkos2 = y;
-
-            //            g.DrawLine(myPen, (float)minCoordsX[0] * -1, (float)minCoordsY[0],
-            //            (float)x * -1, (float)y);
-            //        }
-
-            //        //Цикл для переноса точек пересечения к первому прокосу
-            //        List<double> nextLinesForP = new List<double>();
-            //        double[] newLines = new double[2];
-
-            //        for (int i = 0; i < crossPointX.Count - 1; i++)
-            //        {
-            //            if (i % 2 == 0)
-            //            {
-            //                newLines[0] = DoLinesIntersect(xProkos1, yProkos1, xProkos2, yProkos2,
-            //                    crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1])[0];
-            //                newLines[1] = DoLinesIntersect(xProkos1, yProkos1, xProkos2, yProkos2,
-            //                    crossPointX[i], crossPointY[i], crossPointX[i + 1], crossPointY[i + 1])[1];
-
-            //                if (newLines[0] != -1 && newLines[1] != -1)
-            //                {
-            //                    crossPointX[i] = newLines[0];
-            //                    crossPointY[i] = newLines[1];
-            //                }
-            //            }
-            //        }
-
-            //        minCoordsX.Clear();
-            //        minCoordsY.Clear();
-            //        temp_knife_x1.Clear();
-            //        temp_knife_x2.Clear();
-            //        temp_knife_y1.Clear();
-            //        temp_knife_y2.Clear();
-            //        temp_array_min = null;
-            //        temp_array_min2 = null;
-
-            //    } while (turnCount >= 2);
-            //}
-
             if (textBoxForFullWayCombain.Text.Equals(""))
             {
                 MessageBox.Show("enter full!!");
@@ -633,6 +432,18 @@ namespace LogistikField
                             (float)prokosX[3] * -1, (float)prokosY[3]);
 
                 } while (longForProkosCount <= 2);
+            }
+        }
+
+        private void добавитьПолеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.IO.StreamReader sr = new System.IO.StreamReader(openFileDialog1.FileName);
+                //MessageBox.Show(sr.ReadToEnd());
+                String fileCoords = Path.GetFullPath(openFileDialog1.FileName.ToString());
+                textBoxCoordsTest.Text = fileCoords;
+                sr.Close();
             }
         }
     }

@@ -30,22 +30,30 @@
         {
             this.pictureBoxField = new System.Windows.Forms.PictureBox();
             this.buttonViewField = new System.Windows.Forms.Button();
-            this.textBoxCoordsTest = new System.Windows.Forms.TextBox();
-            this.buttonView = new System.Windows.Forms.Button();
-            this.labelFileWithField = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.buttonTrackView = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxForFullWayCombain = new System.Windows.Forms.TextBox();
             this.buttonOptymalTrack = new System.Windows.Forms.Button();
+            this.buttonAddTrouble = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.закрытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьПолеToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьПолеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьПрепяствияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBoxCoordsTest = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxField)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBoxField
             // 
             this.pictureBoxField.BackColor = System.Drawing.SystemColors.Window;
             this.pictureBoxField.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxField.Location = new System.Drawing.Point(12, 12);
+            this.pictureBoxField.Location = new System.Drawing.Point(9, 26);
             this.pictureBoxField.Name = "pictureBoxField";
             this.pictureBoxField.Size = new System.Drawing.Size(420, 367);
             this.pictureBoxField.TabIndex = 0;
@@ -53,40 +61,13 @@
             // 
             // buttonViewField
             // 
-            this.buttonViewField.Location = new System.Drawing.Point(655, 59);
+            this.buttonViewField.Location = new System.Drawing.Point(558, 63);
             this.buttonViewField.Name = "buttonViewField";
-            this.buttonViewField.Size = new System.Drawing.Size(114, 42);
+            this.buttonViewField.Size = new System.Drawing.Size(99, 42);
             this.buttonViewField.TabIndex = 3;
             this.buttonViewField.Text = "Отрисовать поле";
             this.buttonViewField.UseVisualStyleBackColor = true;
             this.buttonViewField.Click += new System.EventHandler(this.buttonViewField_Click);
-            // 
-            // textBoxCoordsTest
-            // 
-            this.textBoxCoordsTest.Location = new System.Drawing.Point(473, 75);
-            this.textBoxCoordsTest.Name = "textBoxCoordsTest";
-            this.textBoxCoordsTest.ReadOnly = true;
-            this.textBoxCoordsTest.Size = new System.Drawing.Size(42, 20);
-            this.textBoxCoordsTest.TabIndex = 4;
-            // 
-            // buttonView
-            // 
-            this.buttonView.Location = new System.Drawing.Point(521, 75);
-            this.buttonView.Name = "buttonView";
-            this.buttonView.Size = new System.Drawing.Size(66, 20);
-            this.buttonView.TabIndex = 5;
-            this.buttonView.Text = "Обзор";
-            this.buttonView.UseVisualStyleBackColor = true;
-            this.buttonView.Click += new System.EventHandler(this.buttonView_Click);
-            // 
-            // labelFileWithField
-            // 
-            this.labelFileWithField.AutoSize = true;
-            this.labelFileWithField.Location = new System.Drawing.Point(470, 59);
-            this.labelFileWithField.Name = "labelFileWithField";
-            this.labelFileWithField.Size = new System.Drawing.Size(83, 13);
-            this.labelFileWithField.TabIndex = 6;
-            this.labelFileWithField.Text = "Файл с полем:";
             // 
             // buttonTrackView
             // 
@@ -124,26 +105,108 @@
             this.buttonOptymalTrack.UseVisualStyleBackColor = true;
             this.buttonOptymalTrack.Click += new System.EventHandler(this.buttonOptymalTrack_Click);
             // 
+            // buttonAddTrouble
+            // 
+            this.buttonAddTrouble.Location = new System.Drawing.Point(663, 63);
+            this.buttonAddTrouble.Name = "buttonAddTrouble";
+            this.buttonAddTrouble.Size = new System.Drawing.Size(106, 42);
+            this.buttonAddTrouble.TabIndex = 20;
+            this.buttonAddTrouble.Text = "Добавить препятствия";
+            this.buttonAddTrouble.UseVisualStyleBackColor = true;
+            this.buttonAddTrouble.Click += new System.EventHandler(this.buttonAddTrouble_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem,
+            this.добавитьПолеToolStripMenuItem1,
+            this.справкаToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(794, 24);
+            this.menuStrip1.TabIndex = 21;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.сохранитьToolStripMenuItem,
+            this.закрытьToolStripMenuItem});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.сохранитьToolStripMenuItem.Text = "Сохранить";
+            // 
+            // закрытьToolStripMenuItem
+            // 
+            this.закрытьToolStripMenuItem.Name = "закрытьToolStripMenuItem";
+            this.закрытьToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.закрытьToolStripMenuItem.Text = "Закрыть";
+            // 
+            // добавитьПолеToolStripMenuItem1
+            // 
+            this.добавитьПолеToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.добавитьПолеToolStripMenuItem,
+            this.добавитьПрепяствияToolStripMenuItem});
+            this.добавитьПолеToolStripMenuItem1.Name = "добавитьПолеToolStripMenuItem1";
+            this.добавитьПолеToolStripMenuItem1.Size = new System.Drawing.Size(57, 20);
+            this.добавитьПолеToolStripMenuItem1.Text = "Поле...";
+            // 
+            // добавитьПолеToolStripMenuItem
+            // 
+            this.добавитьПолеToolStripMenuItem.Name = "добавитьПолеToolStripMenuItem";
+            this.добавитьПолеToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.добавитьПолеToolStripMenuItem.Text = "Добавить поле";
+            this.добавитьПолеToolStripMenuItem.Click += new System.EventHandler(this.добавитьПолеToolStripMenuItem_Click);
+            // 
+            // добавитьПрепяствияToolStripMenuItem
+            // 
+            this.добавитьПрепяствияToolStripMenuItem.Name = "добавитьПрепяствияToolStripMenuItem";
+            this.добавитьПрепяствияToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.добавитьПрепяствияToolStripMenuItem.Text = "Добавить препяствия";
+            // 
+            // справкаToolStripMenuItem
+            // 
+            this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
+            this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.справкаToolStripMenuItem.Text = "Справка";
+            // 
+            // textBoxCoordsTest
+            // 
+            this.textBoxCoordsTest.Location = new System.Drawing.Point(9, 399);
+            this.textBoxCoordsTest.Name = "textBoxCoordsTest";
+            this.textBoxCoordsTest.ReadOnly = true;
+            this.textBoxCoordsTest.Size = new System.Drawing.Size(420, 20);
+            this.textBoxCoordsTest.TabIndex = 4;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 405);
+            this.ClientSize = new System.Drawing.Size(794, 428);
+            this.Controls.Add(this.buttonAddTrouble);
             this.Controls.Add(this.buttonOptymalTrack);
             this.Controls.Add(this.textBoxForFullWayCombain);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.pictureBoxField);
             this.Controls.Add(this.buttonTrackView);
-            this.Controls.Add(this.labelFileWithField);
-            this.Controls.Add(this.buttonView);
             this.Controls.Add(this.textBoxCoordsTest);
             this.Controls.Add(this.buttonViewField);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Logistik";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxField)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -153,14 +216,21 @@
 
         private System.Windows.Forms.PictureBox pictureBoxField;
         private System.Windows.Forms.Button buttonViewField;
-        private System.Windows.Forms.TextBox textBoxCoordsTest;
-        private System.Windows.Forms.Button buttonView;
-        private System.Windows.Forms.Label labelFileWithField;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button buttonTrackView;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxForFullWayCombain;
         private System.Windows.Forms.Button buttonOptymalTrack;
+        private System.Windows.Forms.Button buttonAddTrouble;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem добавитьПолеToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem закрытьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem добавитьПолеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem добавитьПрепяствияToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
+        private System.Windows.Forms.TextBox textBoxCoordsTest;
     }
 }
 
