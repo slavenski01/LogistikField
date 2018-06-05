@@ -11,7 +11,7 @@ using System.IO;
 
 namespace LogistikField
 {
-    
+
     public partial class Form1 : Form
     {
         List<double> coordsX = new List<double>();      //координаты поля по x
@@ -26,11 +26,46 @@ namespace LogistikField
         List<double> tempTruncateX = new List<double>();
         List<double> tempTruncateY = new List<double>();
 
+        List<double> testGeoX = new List<double>();
+        List<double> testGeoY = new List<double>();
+
         public Form1()
         {
             InitializeComponent();
         }
-        
+
+        //Функция преобразования географических координат
+        private double[] geoTransform (double x, double y)
+        {
+            double[] cords = new double[2];
+            cords[0] = x;
+            cords[1] = y;
+
+            int widthPictureBox = pictureBoxField.Width;
+            int heigthPictureBox = pictureBoxField.Height;
+
+            double maxX = coordsX.Max();
+            double minX = coordsX.Min();
+            double maxY = coordsY.Max();
+            double minY = coordsY.Min();
+
+            // Масштаб
+            double scalle = 1;
+
+            // Вычисления
+            double koffX = (maxX - minX) / widthPictureBox;
+            double koffY = (maxY - minY) / heigthPictureBox;
+            double koffMax = (koffX < koffY ? koffY : koffX) / scalle;
+
+            double centrX = (maxX - minX) / 2;
+            double centrY = (maxY - minY) / 2; //аналогично только по Y.
+
+            double xPixel = Math.Round(((double)cords[0] - minX) / koffMax, 0) + centrX;
+            double yPixel = Math.Round(((double)cords[1] - minY) / koffMax, 0) + centrY;
+
+            return cords;
+        }
+
         private void buttonView_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -87,10 +122,12 @@ namespace LogistikField
                     tempTruncateY.Add(Math.Truncate(coordsY[i]));
                     //coordsX[i] = (((coordsX[i] * 10) - 438) * 500 - 400) * 2;
                     //coordsY[i] = (((coordsY[i] * 10) - 502) * 500 - 200) * 2;
-                    //coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 10 - 800;
-                    //coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 10 - 400;
-                    coordsX[i] = coordsX[i] + 200;
-                    coordsY[i] = coordsY[i] + 140;
+                    //coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 10 - 1100;
+                    //coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 10 - 1100;
+                    //coordsX[i] = coordsX[i] + 200;
+                    //coordsY[i] = coordsY[i] + 140;
+                    testGeoX.Add(geoTransform(coordsX[i], coordsY[i])[0]);
+                    testGeoY.Add(geoTransform(coordsX[i], coordsY[i])[1]);
                 }
 
                 //for (int i = 0; i < coordsX.Count; i++)
@@ -99,13 +136,19 @@ namespace LogistikField
                 //}
 
 
-                for (int i = coordsX.Count - 1; i > 0; i--)
+                //for (int i = coordsX.Count - 1; i > 0; i--)
+                //{
+                //    //g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-0.1)), Convert.ToSingle(coordsY[i - 1] * (0.1)),
+                //    //     Convert.ToSingle(coordsX[i] * (-0.1)), Convert.ToSingle(coordsY[i] * (0.1)));
+                //    g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
+                //         Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
+                //}
+                for (int i = testGeoX.Count - 1; i > 0; i--)
                 {
                     //g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-0.1)), Convert.ToSingle(coordsY[i - 1] * (0.1)),
                     //     Convert.ToSingle(coordsX[i] * (-0.1)), Convert.ToSingle(coordsY[i] * (0.1)));
-                    g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
-                         Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
-
+                    g.DrawLine(myPen, Convert.ToSingle(testGeoX[i - 1] * (-1)), Convert.ToSingle(testGeoY[i - 1] * (1)),
+                         Convert.ToSingle(testGeoX[i] * (-1)), Convert.ToSingle(testGeoY[i] * (1)));
                 }
             }
             else
