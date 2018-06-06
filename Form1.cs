@@ -43,8 +43,7 @@ namespace LogistikField
             InitializeComponent();
         }
 
-        //Функции преобразования географических координат
-
+        //Функции преобразования географических координат из проекции WGS84 в метры
         private double geoTransformX(double xLat)
         {
             double Lekvator = 40007520; //длина экватора
@@ -53,7 +52,6 @@ namespace LogistikField
             xLat = degreeEkvLat * xLat;
             return xLat;
         }
-
         private double geoTransformY(double yLot)
         {
             double Lekvator = 40007520; //длина экватора
@@ -110,19 +108,15 @@ namespace LogistikField
                 
                 for (int i = 0; i < coordsX.Count; i++)
                 {
-                    tempTruncateX.Add(Math.Truncate(coordsX[i]));
-                    tempTruncateY.Add(Math.Truncate(coordsY[i]));
-                    //coordsX[i] = (((coordsX[i] * 10) - 438) * 500 - 400) * 2;
-                    //coordsY[i] = (((coordsY[i] * 10) - 502) * 500 - 200) * 2;
+                    //tempTruncateX.Add(Math.Truncate(coordsX[i]));
+                    //tempTruncateY.Add(Math.Truncate(coordsY[i]));
 
                     testGeoX.Add(geoTransformX(coordsX[i]));
                     testGeoY.Add(geoTransformY(coordsY[i]));
 
                     coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 5 - 500;
                     coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 5 - 500;
-                    //coordsX[i] = coordsX[i] + 200;
-                    //coordsY[i] = coordsY[i] + 140;
-                    MessageBox.Show("x: " + testGeoX[i].ToString() + "\t y: " + testGeoY[i].ToString());
+                    //MessageBox.Show("x: " + testGeoX[i].ToString() + "\t y: " + testGeoY[i].ToString());
                     //MessageBox.Show(testGeoX[i].ToString() + "         " + testGeoY[i].ToString());
                 }
 
@@ -134,8 +128,6 @@ namespace LogistikField
 
                 for (int i = coordsX.Count - 1; i > 0; i--)
                 {
-                    //g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-0.1)), Convert.ToSingle(coordsY[i - 1] * (0.1)),
-                    //     Convert.ToSingle(coordsX[i] * (-0.1)), Convert.ToSingle(coordsY[i] * (0.1)));
                     g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
                          Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
                 }
@@ -197,6 +189,41 @@ namespace LogistikField
                 return pointCross;
             }
             
+        }
+
+
+        //Запись в файл для получения графиков
+        private void writeToFileForGraph(int minCross, double longTracks, int iter)
+        {
+            string writePathK = "testGraph/k(phi).txt";
+            string writePathL = "testGraph/L(phi).txt";
+
+            string textK = iter.ToString() + ", " + minCross.ToString() + "; \n";
+            string textL = iter.ToString() + ", " + longTracks.ToString() + "; \n";
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(writePathK, true, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine(textK);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(writePathL, true, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine(textL);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         //Нажатие кнопки "оптимальный трек"
@@ -269,7 +296,19 @@ namespace LogistikField
                         }
                     }
                 }
-                if(tempCrossPx.Count <= minCross)
+
+                double longTrack = 0;
+
+                for (int j = 0; j < tempCrossPx.Count - 1; j++)
+                {
+                    longTrack += Math.Sqrt((tempCrossPx[j + 1] - tempCrossPx[j]) * (tempCrossPx[j + 1] - tempCrossPx[j])
+                        - (tempCrossPy[j + 1] - tempCrossPy[j]) * (tempCrossPy[j + 1] - tempCrossPy[j]));
+                }
+
+                writeToFileForGraph(tempCrossPx.Count, longTrack, angle);
+                longTrack = 0;
+
+                if (tempCrossPx.Count <= minCross)
                 {
                     minCross = tempCrossPx.Count;
                     countMin = angle;
@@ -284,7 +323,8 @@ namespace LogistikField
                         coordsY.Add(tempY1[i]);
                     }
 
-                    for(int i = 0; i < tempCrossPx.Count; i++)
+                    
+                    for (int i = 0; i < tempCrossPx.Count; i++)
                     {
                         crossPointX.Add(tempCrossPx[i]);
                         crossPointY.Add(tempCrossPy[i]);
@@ -292,6 +332,7 @@ namespace LogistikField
                 }
             }
             MessageBox.Show("Поворотов всего: " + minCross + ", Итерация № " + countMin);
+
             //Цикл, который рисует все треки
             for (int i = 0; i < crossPointX.Count - 1; i++)
             {
