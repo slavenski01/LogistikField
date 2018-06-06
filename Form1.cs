@@ -44,16 +44,25 @@ namespace LogistikField
         }
 
         //Функции преобразования географических координат
-        private double geoTransformX (double x)
-        { 
-            return x;
-        }
-        private double geoTransformY (double y)
+
+        private double geoTransformX(double xLat)
         {
-            return y;
+            double Lekvator = 40007520; //длина экватора
+            double degreeEkv = Lekvator / 360;
+            double degreeEkvLat = degreeEkv * Math.Cos(xLat);
+            xLat = degreeEkvLat * xLat;
+            return xLat;
         }
 
-        private void buttonView_Click(object sender, EventArgs e)
+        private double geoTransformY(double yLot)
+        {
+            double Lekvator = 40007520; //длина экватора
+            double degreeEkv = Lekvator / 360;
+            yLot = yLot * degreeEkv;
+            return yLot;
+        }
+
+        private void добавитьПолеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -105,12 +114,15 @@ namespace LogistikField
                     tempTruncateY.Add(Math.Truncate(coordsY[i]));
                     //coordsX[i] = (((coordsX[i] * 10) - 438) * 500 - 400) * 2;
                     //coordsY[i] = (((coordsY[i] * 10) - 502) * 500 - 200) * 2;
+
+                    testGeoX.Add(geoTransformX(coordsX[i]));
+                    testGeoY.Add(geoTransformY(coordsY[i]));
+
                     coordsX[i] = (((coordsX[i] - Math.Truncate(coordsX[i])) * 1000) - 800) * 5 - 500;
                     coordsY[i] = (((coordsY[i] - Math.Truncate(coordsY[i])) * 1000) - 200) * 5 - 500;
                     //coordsX[i] = coordsX[i] + 200;
                     //coordsY[i] = coordsY[i] + 140;
-                    //testGeoX.Add(geoTransform(coordsX[i], coordsY[i])[0]);
-                    //testGeoY.Add(geoTransform(coordsX[i], coordsY[i])[1]);
+                    MessageBox.Show("x: " + testGeoX[i].ToString() + "\t y: " + testGeoY[i].ToString());
                     //MessageBox.Show(testGeoX[i].ToString() + "         " + testGeoY[i].ToString());
                 }
 
@@ -432,18 +444,6 @@ namespace LogistikField
                             (float)prokosX[3] * -1, (float)prokosY[3]);
 
                 } while (longForProkosCount <= 2);
-            }
-        }
-
-        private void добавитьПолеToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                System.IO.StreamReader sr = new System.IO.StreamReader(openFileDialog1.FileName);
-                //MessageBox.Show(sr.ReadToEnd());
-                String fileCoords = Path.GetFullPath(openFileDialog1.FileName.ToString());
-                textBoxCoordsTest.Text = fileCoords;
-                sr.Close();
             }
         }
     }

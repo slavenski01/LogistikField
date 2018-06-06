@@ -45,6 +45,7 @@
             this.добавитьПрепяствияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxCoordsTest = new System.Windows.Forms.TextBox();
+            this.параметрыКомбайнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxField)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -120,6 +121,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.добавитьПолеToolStripMenuItem1,
+            this.параметрыКомбайнаToolStripMenuItem,
             this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -184,6 +186,12 @@
             this.textBoxCoordsTest.Size = new System.Drawing.Size(420, 20);
             this.textBoxCoordsTest.TabIndex = 4;
             // 
+            // параметрыКомбайнаToolStripMenuItem
+            // 
+            this.параметрыКомбайнаToolStripMenuItem.Name = "параметрыКомбайнаToolStripMenuItem";
+            this.параметрыКомбайнаToolStripMenuItem.Size = new System.Drawing.Size(141, 20);
+            this.параметрыКомбайнаToolStripMenuItem.Text = "Параметры комбайна";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,6 +239,7 @@
         private System.Windows.Forms.ToolStripMenuItem добавитьПрепяствияToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
         private System.Windows.Forms.TextBox textBoxCoordsTest;
+        private System.Windows.Forms.ToolStripMenuItem параметрыКомбайнаToolStripMenuItem;
     }
 }
 
