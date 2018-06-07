@@ -19,6 +19,8 @@ namespace LogistikField
         List<double> coordsY = new List<double>();
         List<double> coordsXLine = new List<double>();
         List<double> coordsYLine = new List<double>();
+        List<double> transformCordsX = new List<double>();
+        List<double> transformCordsY = new List<double>();
 
         //координаты пересечения поля с отрезками трека
         List<double> crossPointX = new List<double>();
@@ -44,19 +46,58 @@ namespace LogistikField
         }
 
         //Функции преобразования географических координат из проекции WGS84 в метры
+
+        private void scaleTransform()
+        {
+            double scale = 0.5;
+
+            double xMin = testGeoX.Min();
+            double yMin = testGeoY.Min();
+            double xMax = testGeoX.Max();
+            double yMax = testGeoY.Max();
+
+            double diffX = xMax - xMin;
+            double diffY = yMax - yMin;
+
+            double koffX = pictureBoxField.Width / diffX;
+            double koffY = pictureBoxField.Height / diffY;
+
+            for(int i = 0; i < testGeoX.Count; i++)
+            {
+                testGeoX[i] = (testGeoX[i] - xMin) * koffX * scale;
+                testGeoY[i] = (testGeoY[i] - yMin) * koffY * scale;
+            }
+
+            double centrX = (testGeoX.Max() - testGeoX.Min()) / 2;
+            double centrY = (testGeoY.Max() - testGeoY.Min()) / 2;
+
+            for (int i = 0; i < testGeoX.Count; i++)
+            {
+                testGeoX[i] += centrX;
+                testGeoY[i] += centrY;
+            }
+        }
+        private double scaleTransformY(double y)
+        {
+            return y;
+        }
+
         private double geoTransformX(double xLat)
         {
             double Lekvator = 40007520; //длина экватора
             double degreeEkv = Lekvator / 360;
             double degreeEkvLat = degreeEkv * Math.Cos(xLat);
             xLat = degreeEkvLat * xLat;
+
             return xLat;
         }
+
         private double geoTransformY(double yLot)
         {
             double Lekvator = 40007520; //длина экватора
             double degreeEkv = Lekvator / 360;
             yLot = yLot * degreeEkv;
+
             return yLot;
         }
 
@@ -120,6 +161,17 @@ namespace LogistikField
                     //MessageBox.Show(testGeoX[i].ToString() + "         " + testGeoY[i].ToString());
                 }
 
+                coordsX.Clear();
+                coordsY.Clear();
+
+                scaleTransform();
+                for(int i = 0; i < testGeoX.Count; i++)
+                {
+                    coordsX.Add(testGeoX[i]);
+                    coordsY.Add(testGeoY[i]);
+                    //MessageBox.Show("x: " + testGeoX[i].ToString() + "\t y: " + testGeoY[i].ToString());
+                }
+                
                 //for (int i = 0; i < coordsX.Count; i++)
                 //{
                 //    MessageBox.Show("x: " + coordsX[i] + "; y: " + coordsY[i] + ";");
@@ -128,8 +180,11 @@ namespace LogistikField
 
                 for (int i = coordsX.Count - 1; i > 0; i--)
                 {
-                    g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
-                         Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
+                    //g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
+                    //     Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
+
+                    g.DrawLine(myPen, Convert.ToSingle(testGeoX[i - 1] * (-1)), Convert.ToSingle(testGeoY[i - 1] * (1)),
+                         Convert.ToSingle(testGeoX[i] * (-1)), Convert.ToSingle(testGeoY[i] * (1)));
                 }
             }
             else
@@ -305,7 +360,7 @@ namespace LogistikField
                         - (tempCrossPy[j + 1] - tempCrossPy[j]) * (tempCrossPy[j + 1] - tempCrossPy[j]));
                 }
 
-                writeToFileForGraph(tempCrossPx.Count, longTrack, angle);
+                //writeToFileForGraph(tempCrossPx.Count, longTrack, angle);
                 longTrack = 0;
 
                 if (tempCrossPx.Count <= minCross)
