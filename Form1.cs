@@ -38,6 +38,7 @@ namespace LogistikField
         List<double> testGeoY = new List<double>();
 
         //Координаты "дырок" в поле
+        String troubleZonePath = "";
         double[,,] troubleZones = new double[0,0,0];
 
         public Form1()
@@ -46,7 +47,6 @@ namespace LogistikField
         }
 
         //Функции преобразования географических координат из проекции WGS84 в метры
-
         private void scaleTransform()
         {
             double scale = 0.5;
@@ -77,11 +77,6 @@ namespace LogistikField
                 testGeoY[i] += centrY;
             }
         }
-        private double scaleTransformY(double y)
-        {
-            return y;
-        }
-
         private double geoTransformX(double xLat)
         {
             double Lekvator = 40007520; //длина экватора
@@ -91,7 +86,6 @@ namespace LogistikField
 
             return xLat;
         }
-
         private double geoTransformY(double yLot)
         {
             double Lekvator = 40007520; //длина экватора
@@ -110,6 +104,18 @@ namespace LogistikField
                 String fileCoords = Path.GetFullPath(openFileDialog1.FileName.ToString());
                 textBoxCoordsTest.Text = fileCoords;
                 sr.Close();
+            }
+        }
+
+        private void добавитьПрепяствияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.IO.StreamReader sr1 = new System.IO.StreamReader(openFileDialog2.FileName);
+                //MessageBox.Show(sr.ReadToEnd());
+                String fileCoords = Path.GetFullPath(openFileDialog2.FileName.ToString());
+                troubleZonePath = fileCoords;
+                sr1.Close();
             }
         }
 
@@ -195,7 +201,42 @@ namespace LogistikField
 
         private void buttonAddTrouble_Click(object sender, EventArgs e)
         {
+            Graphics g = pictureBoxField.CreateGraphics();
+            g.TranslateTransform(pictureBoxField.Width, 0);
+            Pen myPen = new Pen(Color.Black);
 
+            if (troubleZonePath != "")
+            {
+                StreamReader fcoords = new StreamReader(textBoxCoordsTest.Text);
+
+                string temp = "";   //хранит текущее число в файле до точки с запятой
+
+                while (true)    //Считывание с файла
+                {
+                    string text = fcoords.ReadLine();
+                    if (text == null) break;
+                    temp += text;
+                }
+
+                String[] temps = temp.Split(';');   //создаем массив для списка координат
+
+                for (int i = 0; i < temps.Count() - 1; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        coordsX.Add(Convert.ToDouble(temps[i]));
+                    }
+                    else
+                    {
+                        coordsY.Add(Convert.ToDouble(temps[i]));
+                    }
+
+                }
+            }
+            else
+            {
+                MessageBox.Show("Файл с препятствиями не выбран!");
+            }
         }
 
         /*Функция определения пересечения отрезков*/
@@ -329,7 +370,7 @@ namespace LogistikField
                 //Отрезки трека y = 10 + i;
                 for (int i = 0; i < 1000; i++)
                 {
-                    yTrackLine[i] = i;
+                    yTrackLine[i] = i*2;
                 }
 
                 //Цикл, который считает пересечения

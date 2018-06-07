@@ -47,6 +47,7 @@
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxCoordsTest = new System.Windows.Forms.TextBox();
             this.buttonOptPath = new System.Windows.Forms.Button();
+            this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxField)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -65,7 +66,7 @@
             // 
             this.buttonViewField.Location = new System.Drawing.Point(473, 63);
             this.buttonViewField.Name = "buttonViewField";
-            this.buttonViewField.Size = new System.Drawing.Size(184, 42);
+            this.buttonViewField.Size = new System.Drawing.Size(151, 42);
             this.buttonViewField.TabIndex = 3;
             this.buttonViewField.Text = "Отрисовать поле";
             this.buttonViewField.UseVisualStyleBackColor = true;
@@ -109,11 +110,11 @@
             // 
             // buttonAddTrouble
             // 
-            this.buttonAddTrouble.Location = new System.Drawing.Point(663, 63);
+            this.buttonAddTrouble.Location = new System.Drawing.Point(630, 63);
             this.buttonAddTrouble.Name = "buttonAddTrouble";
-            this.buttonAddTrouble.Size = new System.Drawing.Size(106, 42);
+            this.buttonAddTrouble.Size = new System.Drawing.Size(139, 42);
             this.buttonAddTrouble.TabIndex = 20;
-            this.buttonAddTrouble.Text = "Добавить препятствия";
+            this.buttonAddTrouble.Text = "Отрисовать препятствия";
             this.buttonAddTrouble.UseVisualStyleBackColor = true;
             this.buttonAddTrouble.Click += new System.EventHandler(this.buttonAddTrouble_Click);
             // 
@@ -172,6 +173,7 @@
             this.добавитьПрепяствияToolStripMenuItem.Name = "добавитьПрепяствияToolStripMenuItem";
             this.добавитьПрепяствияToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.добавитьПрепяствияToolStripMenuItem.Text = "Добавить препяствия";
+            this.добавитьПрепяствияToolStripMenuItem.Click += new System.EventHandler(this.добавитьПрепяствияToolStripMenuItem_Click);
             // 
             // параметрыКомбайнаToolStripMenuItem
             // 
@@ -252,6 +254,7 @@
         private System.Windows.Forms.TextBox textBoxCoordsTest;
         private System.Windows.Forms.ToolStripMenuItem параметрыКомбайнаToolStripMenuItem;
         private System.Windows.Forms.Button buttonOptPath;
+        private System.Windows.Forms.OpenFileDialog openFileDialog2;
     }
 }
 
