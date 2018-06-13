@@ -48,6 +48,7 @@
             this.textBoxCoordsTest = new System.Windows.Forms.TextBox();
             this.buttonOptPath = new System.Windows.Forms.Button();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxField)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -204,11 +205,20 @@
             this.buttonOptPath.Text = "Порядок обхода";
             this.buttonOptPath.UseVisualStyleBackColor = true;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(473, 284);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(296, 23);
+            this.progressBar1.TabIndex = 23;
+            this.progressBar1.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 428);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.buttonOptPath);
             this.Controls.Add(this.buttonAddTrouble);
             this.Controls.Add(this.buttonOptymalTrack);
@@ -255,6 +265,7 @@
         private System.Windows.Forms.ToolStripMenuItem параметрыКомбайнаToolStripMenuItem;
         private System.Windows.Forms.Button buttonOptPath;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

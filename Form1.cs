@@ -21,6 +21,7 @@ namespace LogistikField
         List<double> coordsYLine = new List<double>();
         List<double> transformCordsX = new List<double>();
         List<double> transformCordsY = new List<double>();
+        double koffX, koffY;
 
         //координаты пересечения поля с отрезками трека
         List<double> crossPointX = new List<double>();
@@ -59,8 +60,10 @@ namespace LogistikField
             double diffX = xMax - xMin;
             double diffY = yMax - yMin;
 
-            double koffX = pictureBoxField.Width / diffX;
-            double koffY = pictureBoxField.Height / diffY;
+            koffX = pictureBoxField.Width / diffX;
+            koffY = pictureBoxField.Height / diffY;
+
+            //MessageBox.Show("xkoff: " + koffX.ToString() + "\tykoff: " + koffY.ToString());
 
             for(int i = 0; i < testGeoX.Count; i++)
             {
@@ -79,7 +82,7 @@ namespace LogistikField
         }
         private double geoTransformX(double xLat)
         {
-            double Lekvator = 40007520; //длина экватора
+            double Lekvator = 40007520.41; //длина экватора
             double degreeEkv = Lekvator / 360;
             double degreeEkvLat = degreeEkv * Math.Cos(xLat);
             xLat = degreeEkvLat * xLat;
@@ -88,13 +91,14 @@ namespace LogistikField
         }
         private double geoTransformY(double yLot)
         {
-            double Lekvator = 40007520; //длина экватора
+            double Lekvator = 40007520.41; //длина экватора
             double degreeEkv = Lekvator / 360;
             yLot = yLot * degreeEkv;
 
             return yLot;
         }
 
+        //выбрать файл с полем
         private void добавитьПолеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -106,7 +110,8 @@ namespace LogistikField
                 sr.Close();
             }
         }
-
+        
+        //выбрать файл с препятствиями
         private void добавитьПрепяствияToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -119,6 +124,7 @@ namespace LogistikField
             }
         }
 
+        //отрисовать поле 
         private void buttonViewField_Click(object sender, EventArgs e)
         {
             if (textBoxCoordsTest.Text != "")
@@ -186,11 +192,11 @@ namespace LogistikField
 
                 for (int i = coordsX.Count - 1; i > 0; i--)
                 {
-                    //g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
-                    //     Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
+                    g.DrawLine(myPen, Convert.ToSingle(coordsX[i - 1] * (-1)), Convert.ToSingle(coordsY[i - 1] * (1)),
+                         Convert.ToSingle(coordsX[i] * (-1)), Convert.ToSingle(coordsY[i] * (1)));
 
-                    g.DrawLine(myPen, Convert.ToSingle(testGeoX[i - 1] * (-1)), Convert.ToSingle(testGeoY[i - 1] * (1)),
-                         Convert.ToSingle(testGeoX[i] * (-1)), Convert.ToSingle(testGeoY[i] * (1)));
+                    //g.DrawLine(myPen, Convert.ToSingle(testGeoX[i - 1] * (-1)), Convert.ToSingle(testGeoY[i - 1] * (1)),
+                    //     Convert.ToSingle(testGeoX[i] * (-1)), Convert.ToSingle(testGeoY[i] * (1)));
                 }
             }
             else
@@ -245,11 +251,13 @@ namespace LogistikField
         {
             double[] pointCross = new double[2];
             // Denominator for ua and ub are the same, so store this calculation
+            // Знаменатель для ua и ub один и тот же, поэтому сохраните этот расчет
+
             double d = (Y4 - Y3) * (X2 - X1) - (X4 - X3) * (Y2 - Y1);
 
+            //n_a и n_b вычисляются как отдельные значения для удобочитаемости
             //n_a and n_b are calculated as seperate values for readability
             double n_a = (X4 - X3) * (Y1 - Y3) - (Y4 - Y3) * (X1 - X3);
-
             double n_b = (X2 - X1) * (Y1 - Y3) - (Y2 - Y1) * (X1 - X3);
 
             // Make sure there is not a division by zero - this also indicates that
@@ -257,15 +265,23 @@ namespace LogistikField
             // If n_a and n_b were both equal to zero the lines would be on top of each 
             // other (coincidental).  This check is not done because it is not 
             // necessary for this implementation (the parallel check accounts for this).
+
+            //RU:Убедитесь, что нет деления на ноль - это также указывает на то, 
+            //что линии параллельны. Если n_a и n_b равны нулю, линии будут 
+            //сверху друг на друга (совпадающие). 
+            //Эта проверка не выполняется, потому что это не является 
+            //необходимым для этой реализации (для этого проверяется параллельная проверка).
+
             if (d == 0)
             {
                 pointCross[0] = -1;
                 pointCross[1] = -1;
                 return pointCross;
             }
-            
+
 
             // Calculate the intermediate fractional point that the lines potentially intersect.
+            // Вычислите промежуточную дробную точку, в которой линии потенциально пересекаются.
             double ua = n_a / d;
             double ub = n_b / d;
 
@@ -287,7 +303,6 @@ namespace LogistikField
             
         }
 
-
         //Запись в файл для получения графиков
         private void writeToFileForGraph(int minCross, double longTracks, int iter)
         {
@@ -295,6 +310,8 @@ namespace LogistikField
             string writePathL = "testGraph/L(phi).txt";
 
             string textK = iter.ToString() + ", " + minCross.ToString() + "; \n";
+            //string textK = iter.ToString() + ", " + 
+                //((longTracks * koffX * 0.5 / (minCross * 2.2 * 480 + longTracks * koffX * 0.5)) * 100000).ToString() + "; \n";
             string textL = iter.ToString() + ", " + longTracks.ToString() + "; \n";
 
             try
@@ -322,7 +339,7 @@ namespace LogistikField
             }
         }
 
-        //Нажатие кнопки "оптимальный трек"
+        //Нажатие кнопки "оптимальный трек", каждый 50 трек рисует для наглядности
         private void buttonOptymalTrack_Click(object sender, EventArgs e)
         {
             Graphics g = pictureBoxField.CreateGraphics();
@@ -330,6 +347,10 @@ namespace LogistikField
             g.TranslateTransform((float)pictureBoxField.Width, 0);
             g.Clear(Color.White);
 
+            //массив для отрисовки каждых 50 треков
+            double[,] drawLines;
+            int countCross = 0;
+            
             //Вращение полигона
             double x0 = (coordsX.Max() + coordsX.Min()) / 2;
             double y0 = (coordsY.Max() + coordsY.Min()) / 2;
@@ -340,6 +361,8 @@ namespace LogistikField
             List<double> tempCrossPx = new List<double>();  //координаты пересечения поля по x
             List<double> tempCrossPy = new List<double>();  //ккординаты пересечения поля по у
             double[] croosTemp = new double[2];
+            double longTrack = 0, longTrackFile = 0;
+            double EFC = 0;
             double xTrackStart = 0, xTrackEnd = pictureBoxField.Width;
             
             int minCross = 1000000, countMin = 0;
@@ -351,8 +374,15 @@ namespace LogistikField
                 tempX1.Add(0);
                 tempY1.Add(0);
             }
+
+            progressBar1.Maximum = 180;
+            progressBar1.Minimum = 0;
+
             for (int angle = 0; angle < 180; angle++)
             {
+                progressBar1.Visible = true;
+                progressBar1.Value += 1;
+
                 tempCrossPx.Clear();
                 tempCrossPy.Clear();
                 for (int i = 0; i < coordsX.Count; i++)
@@ -366,46 +396,53 @@ namespace LogistikField
                 }
 
                 /*Все повернули, считаем кол-во пересечений*/
-
                 //Отрезки трека y = 10 + i;
                 for (int i = 0; i < 1000; i++)
                 {
-                    yTrackLine[i] = i*2;
+                    yTrackLine[i] = i*9;
+                    //yTrackLine[i] = i * 9 * koffY * 0.5;
                 }
 
                 //Цикл, который считает пересечения
                 for (int i = 0; i < yTrackLine.Length; i++)
                 {
-                    if (i % 2 == 1) { continue; }
-                    else
+                    for (int j = 0; j < coordsX.Count - 1; j++)
                     {
-                        for (int j = 0; j < coordsX.Count - 1; j++)
+                        croosTemp = DoLinesIntersect(xTrackStart, yTrackLine[i], xTrackEnd, yTrackLine[i],
+                            tempX1[j], tempY1[j], tempX1[j + 1], tempY1[j + 1]);
+                        if (croosTemp[0] != -1 && croosTemp[1] != -1)
                         {
-                            croosTemp = DoLinesIntersect(xTrackStart, yTrackLine[i], xTrackEnd, yTrackLine[i],
-                                tempX1[j], tempY1[j], tempX1[j + 1], tempY1[j + 1]);
-                            if (croosTemp[0] != -1 && croosTemp[1] != -1)
+                            if(i != countCross)
                             {
-                                tempCrossPx.Add(croosTemp[0]);
-                                tempCrossPy.Add(croosTemp[1]);
+                                countCross++;
                             }
-
+                            tempCrossPx.Add(croosTemp[0]);
+                            tempCrossPy.Add(croosTemp[1]);
                         }
+
                     }
                 }
 
-                double longTrack = 0;
 
+                double longTrackOld;
                 for (int j = 0; j < tempCrossPx.Count - 1; j++)
                 {
                     longTrack += Math.Sqrt((tempCrossPx[j + 1] - tempCrossPx[j]) * (tempCrossPx[j + 1] - tempCrossPx[j])
                         - (tempCrossPy[j + 1] - tempCrossPy[j]) * (tempCrossPy[j + 1] - tempCrossPy[j]));
                 }
-
-                //writeToFileForGraph(tempCrossPx.Count, longTrack, angle);
-                longTrack = 0;
-
-                if (tempCrossPx.Count <= minCross)
+                if(longTrack.ToString().Equals("NaN"))
                 {
+                    longTrack = 0;
+                }
+                double tempEFC = 0;
+                EFC = longTrack / (minCross + longTrack);
+                writeToFileForGraph(tempCrossPx.Count, longTrack, angle);
+
+
+                if (tempEFC <= EFC)
+                {
+                    longTrackFile = longTrack;
+                    tempEFC = EFC;
                     minCross = tempCrossPx.Count;
                     countMin = angle;
                     coordsX.Clear();
@@ -419,21 +456,35 @@ namespace LogistikField
                         coordsY.Add(tempY1[i]);
                     }
 
-                    
                     for (int i = 0; i < tempCrossPx.Count; i++)
                     {
                         crossPointX.Add(tempCrossPx[i]);
                         crossPointY.Add(tempCrossPy[i]);
                     }
-                }
-            }
-            MessageBox.Show("Поворотов всего: " + minCross + ", Итерация № " + countMin);
+                    
+                    drawLines = new double[countCross, crossPointX.Count];
 
+                    //for(int i = 0; i < countCross; i++)
+                    //{
+                    //    for(int j = 0; j < crossPointX.Count; j++)
+                    //    {
+                    //        for()
+                    //    }
+                    //}
+
+                }
+                longTrack = 0;
+            }
+            
+            MessageBox.Show("Поворотов всего: " + minCross + ", Итерация № " + countMin + 
+                "\n EFC: " + longTrackFile);
+            
             //Цикл, который рисует все треки
             for (int i = 0; i < crossPointX.Count - 1; i++)
             {
                 if (i % 2 == 0)
                 {
+                    
                     g.DrawLine(myPen, (float)crossPointX[i] * -1, (float)crossPointY[i],
                         (float)crossPointX[i + 1] * -1, (float)crossPointY[i + 1]);
                 }
@@ -445,6 +496,9 @@ namespace LogistikField
                 g.DrawLine(myPen, (float)coordsX[i + 1] * (-1), (float)coordsY[i + 1] * (1),
                      (float)coordsX[i] * (-1), (float)coordsY[i] * (1));
             }
+
+            progressBar1.Visible = false;
+            progressBar1.Value = 0;
 
             //Тестирование геоинформационных данных
             //double crosX = crossPointX[0] + 800;
@@ -465,7 +519,7 @@ namespace LogistikField
 
         double distance(double x1, double y1, double x2, double y2)
         {
-            double full_path_combain = Convert.ToDouble(textBoxForFullWayCombain.Text);
+            double full_path_combain = Convert.ToDouble(textBoxForFullWayCombain.Text) * koffX * 0.5;
             double resoult = Math.Sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1)); //Расстояние м/у точками
             if (resoult <= full_path_combain) { return 0; } 
             else { return full_path_combain; }
@@ -484,7 +538,8 @@ namespace LogistikField
                 Pen myPen = new Pen(Color.Green);   //Кисть зеленого цвета для отрисовки разреза
                 g.TranslateTransform((float)pictureBoxField.Width, 0);
 
-                double fullWayCombain = Convert.ToDouble(textBoxForFullWayCombain.Text);
+                double fullWayCombain = Convert.ToDouble(textBoxForFullWayCombain.Text) * koffX * 0.5;
+                MessageBox.Show(fullWayCombain.ToString());
 
                 int indexMinELem = 0;
                 double longLine = 0, longLineTemp = 0;
