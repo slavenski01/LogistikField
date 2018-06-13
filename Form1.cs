@@ -304,15 +304,18 @@ namespace LogistikField
         }
 
         //Запись в файл для получения графиков
-        private void writeToFileForGraph(int minCross, double longTracks, int iter)
+        private void writeToFileForGraph(int minCross, double longTracks, int iter, double EFC)
         {
             string writePathK = "testGraph/k(phi).txt";
             string writePathL = "testGraph/L(phi).txt";
+            string writeEFC = "testGraph/EFC.txt";
 
             string textK = iter.ToString() + ", " + minCross.ToString() + "; \n";
             //string textK = iter.ToString() + ", " + 
                 //((longTracks * koffX * 0.5 / (minCross * 2.2 * 480 + longTracks * koffX * 0.5)) * 100000).ToString() + "; \n";
             string textL = iter.ToString() + ", " + longTracks.ToString() + "; \n";
+
+            string textEFC = iter.ToString() + ", " + EFC + "; \n";
 
             try
             {
@@ -331,6 +334,18 @@ namespace LogistikField
                 using (StreamWriter sw = new StreamWriter(writePathL, true, System.Text.Encoding.Default))
                 {
                     sw.WriteLine(textL);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(writeEFC, true, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine(textEFC);
                 }
             }
             catch (Exception e)
@@ -361,7 +376,7 @@ namespace LogistikField
             List<double> tempCrossPx = new List<double>();  //координаты пересечения поля по x
             List<double> tempCrossPy = new List<double>();  //ккординаты пересечения поля по у
             double[] croosTemp = new double[2];
-            double longTrack = 0, longTrackFile = 0;
+            double longTrack = 0, longTrackFile = 0, longSev = 1000 * koffX * 0.5, fakePath, fakePathSumm = 0;
             double EFC = 0;
             double xTrackStart = 0, xTrackEnd = pictureBoxField.Width;
             
@@ -400,7 +415,7 @@ namespace LogistikField
                 for (int i = 0; i < 1000; i++)
                 {
                     yTrackLine[i] = i*9;
-                    //yTrackLine[i] = i * 9 * koffY * 0.5;
+                    //yTrackLine[i] = i * 9 * koffX;
                 }
 
                 //Цикл, который считает пересечения
@@ -424,19 +439,39 @@ namespace LogistikField
                 }
 
 
-                double longTrackOld;
+                double longLineTrack;
                 for (int j = 0; j < tempCrossPx.Count - 1; j++)
                 {
                     longTrack += Math.Sqrt((tempCrossPx[j + 1] - tempCrossPx[j]) * (tempCrossPx[j + 1] - tempCrossPx[j])
                         - (tempCrossPy[j + 1] - tempCrossPy[j]) * (tempCrossPy[j + 1] - tempCrossPy[j]));
+
+                    if (longTrack.ToString().Equals("NaN"))
+                    {
+                        break;
+                    }
+
+                    longLineTrack = Math.Sqrt((tempCrossPx[j + 1] - tempCrossPx[j]) * (tempCrossPx[j + 1] - tempCrossPx[j])
+                        - (tempCrossPy[j + 1] - tempCrossPy[j]) * (tempCrossPy[j + 1] - tempCrossPy[j]));
+
+                    fakePath = longLineTrack - longSev;
+
+                    if(fakePath > 0)
+                    {
+                        fakePathSumm += fakePath;
+                    }
                 }
-                if(longTrack.ToString().Equals("NaN"))
-                {
-                    longTrack = 0;
-                }
+                //if(longTrack.ToString().Equals("NaN"))
+                //{
+                //    longTrack = 0;
+                //}
                 double tempEFC = 0;
-                EFC = longTrack / (minCross + longTrack);
-                writeToFileForGraph(tempCrossPx.Count, longTrack, angle);
+                EFC = longTrack / (minCross + longTrack + fakePathSumm);
+
+                if (EFC.ToString().Equals("NaN")) { EFC = 0; }
+                else
+                {
+                    writeToFileForGraph(tempCrossPx.Count, longTrack, angle, EFC * 10000);
+                }
 
 
                 if (tempEFC <= EFC)
@@ -462,7 +497,7 @@ namespace LogistikField
                         crossPointY.Add(tempCrossPy[i]);
                     }
                     
-                    drawLines = new double[countCross, crossPointX.Count];
+                    //drawLines = new double[countCross, crossPointX.Count];
 
                     //for(int i = 0; i < countCross; i++)
                     //{
@@ -474,10 +509,11 @@ namespace LogistikField
 
                 }
                 longTrack = 0;
+                fakePathSumm = 0;
             }
             
             MessageBox.Show("Поворотов всего: " + minCross + ", Итерация № " + countMin + 
-                "\n EFC: " + longTrackFile);
+                "\n EFC: " + EFC);
             
             //Цикл, который рисует все треки
             for (int i = 0; i < crossPointX.Count - 1; i++)
