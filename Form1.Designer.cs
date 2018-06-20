@@ -204,6 +204,7 @@
             this.buttonOptPath.TabIndex = 22;
             this.buttonOptPath.Text = "Порядок обхода";
             this.buttonOptPath.UseVisualStyleBackColor = true;
+            this.buttonOptPath.Click += new System.EventHandler(this.buttonOptPath_Click);
             // 
             // progressBar1
             // 

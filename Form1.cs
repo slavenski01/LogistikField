@@ -245,6 +245,8 @@ namespace LogistikField
             }
         }
 
+        
+
         /*Функция определения пересечения отрезков*/
         public static double [] DoLinesIntersect(double X1, double Y1, double X2, double Y2, 
             double X3, double Y3, double X4, double Y4)
@@ -414,7 +416,7 @@ namespace LogistikField
                 //Отрезки трека y = 10 + i;
                 for (int i = 0; i < 1000; i++)
                 {
-                    yTrackLine[i] = i*9;
+                    yTrackLine[i] = i*4;
                     //yTrackLine[i] = i * 9 * koffX;
                 }
 
@@ -425,6 +427,7 @@ namespace LogistikField
                     {
                         croosTemp = DoLinesIntersect(xTrackStart, yTrackLine[i], xTrackEnd, yTrackLine[i],
                             tempX1[j], tempY1[j], tempX1[j + 1], tempY1[j + 1]);
+
                         if (croosTemp[0] != -1 && croosTemp[1] != -1)
                         {
                             if(i != countCross)
@@ -434,10 +437,8 @@ namespace LogistikField
                             tempCrossPx.Add(croosTemp[0]);
                             tempCrossPy.Add(croosTemp[1]);
                         }
-
                     }
                 }
-
 
                 double longLineTrack;
                 for (int j = 0; j < tempCrossPx.Count - 1; j++)
@@ -460,10 +461,7 @@ namespace LogistikField
                         fakePathSumm += fakePath;
                     }
                 }
-                //if(longTrack.ToString().Equals("NaN"))
-                //{
-                //    longTrack = 0;
-                //}
+
                 double tempEFC = 0;
                 EFC = longTrack / (minCross + longTrack + fakePathSumm);
 
@@ -496,24 +494,15 @@ namespace LogistikField
                         crossPointX.Add(tempCrossPx[i]);
                         crossPointY.Add(tempCrossPy[i]);
                     }
-                    
-                    //drawLines = new double[countCross, crossPointX.Count];
-
-                    //for(int i = 0; i < countCross; i++)
-                    //{
-                    //    for(int j = 0; j < crossPointX.Count; j++)
-                    //    {
-                    //        for()
-                    //    }
-                    //}
-
                 }
                 longTrack = 0;
                 fakePathSumm = 0;
             }
-            
-            MessageBox.Show("Поворотов всего: " + minCross + ", Итерация № " + countMin + 
-                "\n EFC: " + EFC);
+
+            //MessageBox.Show("Поворотов всего: " + minCross + ", Итерация № " + countMin + 
+            //    "\n EFC: " + EFC);
+            MessageBox.Show(1.ToString() + 2.ToString() + 4.ToString() + 
+                3 + 8 + 7 + 6 + 5);
             
             //Цикл, который рисует все треки
             for (int i = 0; i < crossPointX.Count - 1; i++)
@@ -521,8 +510,8 @@ namespace LogistikField
                 if (i % 2 == 0)
                 {
                     
-                    g.DrawLine(myPen, (float)crossPointX[i] * -1, (float)crossPointY[i],
-                        (float)crossPointX[i + 1] * -1, (float)crossPointY[i + 1]);
+                    g.DrawLine(myPen, (float)crossPointX[i + 1] * -1, (float)crossPointY[i + 1],
+                        (float)crossPointX[i] * -1, (float)crossPointY[i]);
                 }
             }
 
@@ -672,7 +661,52 @@ namespace LogistikField
                             (float)prokosX[3] * -1, (float)prokosY[3]);
 
                 } while (longForProkosCount <= 2);
+
+
+
             }
+        }
+
+        /*
+        public void poisk(int x)
+        {
+            if ((schet_gor == k) && (mat[x, 1] != 0) && (current_sum + mat[x, 1] < min_sum))
+            {
+                searh_gor = 1;                    //маршрут найден
+                min_sum = current_sum + mat[x, 1];                //изменяем: новая минимальная сумма расстояний
+                for (int i = 1; i <= k; i++) min_path[i] = M[i];   //изменяем: новый минимальный путь
+            }
+            else
+            {
+                for (int i = 1; i <= k; i++)     //из текущего города просматриваем все города
+                    if ((i != x) && (mat[x, i] != 0) && (M[i] == 0) && (current_sum + mat[x, i] < min_sum))    //текущая сумма не превышает минимальной
+                    {
+                        current_sum += mat[x, i];                //наращиваем сумму
+                        schet_gor++;                //количество просмотренных городав
+                        M[i] = schet_gor;                //отмечаем у нового города новый номер в порядке обхода
+                        poisk(i);                //поиск нового города начиная с города i
+                        M[i] = 0;                    //возвращаем все назад
+                        schet_gor--;
+                        current_sum -= mat[x, i];
+
+                    }
+            }
+        }
+        public void pusk()
+        {
+            current_sum = 0;                    //обнуляем сумму растояний
+            searh_gor = 0;                      //маршрут не найден
+            min_sum = 45654;               //сумма не минимальна
+            for (int i = 1; i <= k; i++) M[i] = 0;  //текущий путь не найден
+            schet_gor = 1;                        //первый город пройден
+            M[1] = schet_gor;                  //считаем что поиск начинается с первого города
+            poisk(1);                    //считаем что поиск начинается с первого город
+        }
+        */
+        private void buttonOptPath_Click(object sender, EventArgs e)
+        {
+            //poisk(x);
+            //pusk();
         }
     }
 }
